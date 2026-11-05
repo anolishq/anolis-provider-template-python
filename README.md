@@ -20,6 +20,12 @@ What it gives you, all passing in CI:
 
 CI and release depend on nothing of anolishq's beyond public releases, so the
 same workflows run in your account.
+[anolis-provider-hello-python](https://github.com/CameronBrooks11/anolis-provider-hello-python)
+is the evidence: a provider generated from this template on a personal account,
+renamed with `scripts/rename.sh` and released as
+[v0.1.0](https://github.com/CameronBrooks11/anolis-provider-hello-python/releases/tag/v0.1.0)
+with nothing else changed. If the build or release path here changes, generate
+it again the same way.
 
 ## Start a provider from it
 
