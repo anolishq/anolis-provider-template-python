@@ -96,9 +96,12 @@ jobs:
           python-version: "3.13"
       - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
       # What "Use this template" followed by `just rename` gives an author must
-      # still pass the same checks.
-      - name: Rename to a new kind and run the checks
+      # still pass the same checks. It renames twice, because a provider made from
+      # the template runs this job on its own name: the script must rename from
+      # whatever the provider is called now, not only from the template.
+      - name: Rename to a new kind (twice) and run the checks
         run: |
+          scripts/rename.sh renamed-once
           scripts/rename.sh renamed-check
           uv lock
           uv sync --locked --extra dev
