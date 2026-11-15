@@ -127,9 +127,17 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Evaluate job results
+      # Passes only when every needed job ended as success or skipped, so a job
+      # that never ran (abandoned) or any other result fails it.
+      - name: Require every needed job passed
+        env:
+          RESULTS: ${{ join(needs.*.result, ' ') }}
         run: |
-          echo "Job results: ${{ toJSON(needs.*.result) }}"
-      - uses: anolishq/.github/.github/actions/require-needs-passed@f4817837f29993c35b5350fbb5dfe2563437fcde # v2
-        with:
-          results: ${{ join(needs.*.result, ' ') }}
+          echo "Job results: $RESULTS"
+          [ -n "${RESULTS// /}" ] || { echo "::error::no job results were given"; exit 1; }
+          for result in $RESULTS; do
+            case "$result" in
+              success | skipped) ;;
+              *) echo "::error::a needed job ended as '$result'"; exit 1 ;;
+            esac
+          done
